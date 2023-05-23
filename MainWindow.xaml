@@ -1,0 +1,74 @@
+﻿<Window x:Class="ContactsDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ContactsDemo"
+        xmlns:loc="clr-namespace:ContactsDemo.Locales"
+        xmlns:viewmodels="clr-namespace:ContactsDemo.ViewModels"
+        xmlns:m="clr-namespace:ContactsDemo.Models"
+        mc:Ignorable="d"
+        Title="{x:Static loc:Locale.AppTitle}" Height="450" Width="800" MinHeight="450" MinWidth="300" Closed="Window_Closed">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:ContactsOverview}">
+            <DockPanel Margin="4,4,4,4">
+                <DockPanel DockPanel.Dock="Top">
+                    <Button DockPanel.Dock="Left" x:Name="AddContactButton" Content="+" FontWeight="Bold" Click="AddContactButton_Click" MinWidth="50"/>
+                    <Button DockPanel.Dock="Right" x:Name="ClearSearchButton" Content="{x:Static loc:Locale.Clear}" HorizontalAlignment="Right" Click="ClearSearchButton_Click"/>
+                    <TextBlock Text="{x:Static loc:Locale.Search}" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding ContactsView}" HorizontalAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type m:Contact}">
+                                <Button x:Name="EditContactButton" Width="150" Height="150" Click="EditContactButton_Click">
+                                    <TextBlock Text="{Binding Name}" FontSize="24" TextWrapping="Wrap" TextAlignment="Center"/>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type m:Contact}">
+            <Grid VerticalAlignment="Top" Margin="4,4,4,4">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static loc:Locale.Name}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static loc:Locale.Address}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Address}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static loc:Locale.Email}"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Email}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="{x:Static loc:Locale.PhoneNumber}"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding PhoneNumber}"/>
+                <Grid Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Row="0" Grid.Column="0" x:Name="ContactEditBackButton" Content="{x:Static loc:Locale.Back}" Click="ContactEditBackButton_Click" MinWidth="50" />
+                    <Button Grid.Row="0" Grid.Column="1" x:Name="ContactEditDeleteButton" Content="{x:Static loc:Locale.Delete}" Click="ContactEditDeleteButton_Click" MinWidth="50" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <DockPanel>
+        <ContentControl Content="{Binding}" />
+    </DockPanel>
+</Window>
